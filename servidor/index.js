@@ -25,7 +25,7 @@ app.use(
     secret: process.env.SECRET,
     algorithms: ["HS256"],
     getToken: req => req.cookies.token
-  }).unless({ path: ["/autenticar", "/logar", "/deslogar","sobre"] })
+  }).unless({ path: ["/autenticar", "/logar", "/deslogar"] })
 );
 
 app.get('/autenticar', async function(req, res){
@@ -38,6 +38,20 @@ app.get('/', async function(req, res){
 
 app.get('/sobre', async function (req, res){
   res.render('sobre')
+})
+
+app.post('/cadastrar', async function(req, res){
+  const usuarios = await usuario.create(req.body);
+  res.json(usuarios)
+})
+
+app.get('/adicionar', async function(req, res){
+  res.render('cadastrar')
+})
+
+app.get('/visualizar', async function(req, res){
+  const usuarios = await usuario.findAll();
+  res.render('visualizar', {usuarios})
 })
 
 app.post('/logar', (req, res) => {
